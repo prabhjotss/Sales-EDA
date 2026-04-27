@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sales Analytics Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary:   #4C72B0;
+      --accent:    #e74c3c;
+      --bg:        #f4f6fb;
+      --card-bg:   #ffffff;
+      --sidebar-w: 220px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: #333;
+    }
+
+    /* ── Sidebar ── */
+    #sidebar {
+      position: fixed; top: 0; left: 0;
+      width: var(--sidebar-w); height: 100vh;
+      background: var(--primary);
+      display: flex; flex-direction: column;
+      padding: 0;
+      z-index: 100;
+    }
+    #sidebar .brand {
+      padding: 22px 20px;
+      font-size: 1.15rem; font-weight: 700; color: #fff;
+      border-bottom: 1px solid rgba(255,255,255,.15);
+    }
+    #sidebar .brand small { display: block; font-weight: 300; font-size: .75rem; opacity: .75; }
+    #sidebar nav a {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 22px;
+      color: rgba(255,255,255,.8); text-decoration: none;
+      font-size: .9rem; transition: background .15s;
+    }
+    #sidebar nav a:hover, #sidebar nav a.active {
+      background: rgba(255,255,255,.15); color: #fff;
+    }
+    #sidebar nav a i { font-size: 1.1rem; }
+
+    /* ── Main ── */
+    #main {
+      margin-left: var(--sidebar-w);
+      padding: 28px 32px;
+      min-height: 100vh;
+    }
+
+    .page-title {
+      font-size: 1.5rem; font-weight: 700; color: var(--primary);
+      margin-bottom: 6px;
+    }
+    .page-sub { color: #888; font-size: .9rem; margin-bottom: 24px; }
+
+    /* ── KPI Cards ── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 18px;
+      margin-bottom: 30px;
+    }
+    .kpi-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px 22px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+      border-left: 4px solid var(--primary);
+    }
+    .kpi-card.accent { border-left-color: var(--accent); }
+    .kpi-card .label { font-size: .75rem; color: #888; text-transform: uppercase; letter-spacing: .06em; }
+    .kpi-card .value { font-size: 1.5rem; font-weight: 700; color: #222; margin-top: 4px; }
+    .kpi-card .icon  { font-size: 1.6rem; float: right; opacity: .15; margin-top: -30px; }
+
+    /* ── Chart Cards ── */
+    .chart-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 22px 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+      margin-bottom: 22px;
+    }
+    .chart-card h5 {
+      font-size: 1rem; font-weight: 600; color: #444;
+      margin-bottom: 4px;
+    }
+    .chart-card .chart-sub { font-size: .8rem; color: #999; margin-bottom: 14px; }
+    .chart-card img { width: 100%; border-radius: 8px; }
+
+    /* ── Insights ── */
+    .insight-card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 14px;
+      box-shadow: 0 1px 5px rgba(0,0,0,.06);
+      display: flex; gap: 14px; align-items: flex-start;
+    }
+    .insight-card .emoji { font-size: 1.5rem; line-height: 1; }
+    .insight-card strong { display: block; color: var(--primary); font-size: .92rem; }
+    .insight-card p { margin: 2px 0 0; font-size: .85rem; color: #555; }
+
+    /* ── Section titles ── */
+    .section-title {
+      font-size: 1rem; font-weight: 700; color: var(--primary);
+      letter-spacing: .04em; text-transform: uppercase;
+      margin: 28px 0 14px;
+      border-bottom: 2px solid #e8edf5; padding-bottom: 6px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      #sidebar { width: 60px; }
+      #sidebar .brand span, #sidebar nav a span { display: none; }
+      #main { margin-left: 60px; padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Sidebar ── -->
+<div id="sidebar">
+  <div class="brand">
+    <i class="bi bi-bar-chart-fill"></i>
+    <span>SalesIQ</span>
+    <small>Analytics Dashboard</small>
+  </div>
+  <nav>
+    <a href="#kpis"     class="active"><i class="bi bi-speedometer2"></i> <span>KPIs</span></a>
+    <a href="#revenue">            <i class="bi bi-graph-up-arrow"></i> <span>Revenue</span></a>
+    <a href="#products">           <i class="bi bi-box-seam"></i>        <span>Products</span></a>
+    <a href="#geography">          <i class="bi bi-geo-alt"></i>          <span>Geography</span></a>
+    <a href="#timing">             <i class="bi bi-clock"></i>            <span>Peak Hours</span></a>
+    <a href="#bundles">            <i class="bi bi-bag-heart"></i>        <span>Bundles</span></a>
+    <a href="#insights">           <i class="bi bi-lightbulb"></i>        <span>Insights</span></a>
+  </nav>
+</div>
+
+<!-- ── Main Content ── -->
+<div id="main">
+
+  <div class="page-title">📊 Sales Analytics Dashboard</div>
+  <div class="page-sub">Electronics Sales — Full Year Analysis &nbsp;|&nbsp; All figures in USD</div>
+
+  <!-- KPIs -->
+  <div id="kpis" class="kpi-grid">
+    <div class="kpi-card">
+      <div class="label">Total Revenue</div>
+      <div class="value">{{ kpis.total_revenue }}</div>
+      <i class="bi bi-currency-dollar icon"></i>
+    </div>
+    <div class="kpi-card accent">
+      <div class="label">Total Orders</div>
+      <div class="value">{{ kpis.total_orders }}</div>
+      <i class="bi bi-cart3 icon"></i>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Avg Order Value</div>
+      <div class="value">{{ kpis.avg_order }}</div>
+      <i class="bi bi-receipt icon"></i>
+    </div>
+    <div class="kpi-card accent">
+      <div class="label">Best Month</div>
+      <div class="value">{{ kpis.best_month }}</div>
+      <i class="bi bi-calendar-check icon"></i>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Top City</div>
+      <div class="value">{{ kpis.top_city }}</div>
+      <i class="bi bi-building icon"></i>
+    </div>
+    <div class="kpi-card accent">
+      <div class="label">Top Product</div>
+      <div class="value" style="font-size:1rem;">{{ kpis.top_product }}</div>
+      <i class="bi bi-star icon"></i>
+    </div>
+  </div>
+
+  <!-- Monthly Revenue -->
+  <div class="section-title" id="revenue">📈 Revenue Trends</div>
+  <div class="chart-card">
+    <h5>Monthly Revenue</h5>
+    <div class="chart-sub">Red bar = peak month. Hover the image for full detail.</div>
+    <img src="{{ url_for('static', filename='charts/monthly.png') }}" alt="Monthly Revenue"/>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="chart-card" id="timing">
+        <h5>⏰ Peak Buying Hours</h5>
+        <div class="chart-sub">Two peaks: 11–12 AM and 7–9 PM — optimal ad windows.</div>
+        <img src="{{ url_for('static', filename='charts/hourly.png') }}" alt="Hourly"/>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="chart-card">
+        <h5>📅 Day × Hour Heatmap</h5>
+        <div class="chart-sub">Brightest cells = highest revenue. Tuesday–Thursday evenings lead.</div>
+        <img src="{{ url_for('static', filename='charts/heatmap.png') }}" alt="Heatmap"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products -->
+  <div class="section-title" id="products">📦 Product Performance</div>
+  <div class="chart-card">
+    <h5>Revenue by Product</h5>
+    <div class="chart-sub">High-price items drive revenue; high-volume accessories drive repeat purchases.</div>
+    <img src="{{ url_for('static', filename='charts/products.png') }}" alt="Products"/>
+  </div>
+
+  <!-- Geography -->
+  <div class="section-title" id="geography">🏙️ City Performance</div>
+  <div class="chart-card">
+    <h5>Revenue by City</h5>
+    <div class="chart-sub">San Francisco and LA lead. Austin shows growth potential.</div>
+    <img src="{{ url_for('static', filename='charts/cities.png') }}" alt="Cities"/>
+  </div>
+
+  <!-- Bundles -->
+  <div class="section-title" id="bundles">🛍️ Frequently Bought Together</div>
+  <div class="chart-card">
+    <h5>Top Co-Purchase Pairs</h5>
+    <div class="chart-sub">Bundle these pairs with small discounts to increase AOV and conversion rate.</div>
+    <img src="{{ url_for('static', filename='charts/bundles.png') }}" alt="Bundles"/>
+  </div>
+
+  <!-- Insights -->
+  <div class="section-title" id="insights">💡 Key Business Insights</div>
+  <div id="insights-container">
+    <div class="d-flex justify-content-center p-4"><div class="spinner-border text-primary"></div></div>
+  </div>
+
+</div>
+
+<script>
+  // Load insights dynamically
+  fetch("/api/insights")
+    .then(r => r.json())
+    .then(data => {
+      const el = document.getElementById("insights-container");
+      el.innerHTML = data.map(i => `
+        <div class="insight-card">
+          <span class="emoji">${i.icon}</span>
+          <div><strong>${i.title}</strong><p>${i.text}</p></div>
+        </div>`).join("");
+    });
+
+  // Sidebar active highlight
+  const links = document.querySelectorAll("#sidebar nav a");
+  const sections = [...document.querySelectorAll("[id]")];
+  window.addEventListener("scroll", () => {
+    const pos = window.scrollY + 120;
+    sections.filter(s => pos >= s.offsetTop).forEach(s => {
+      links.forEach(l => l.classList.toggle("active", l.getAttribute("href") === "#"+s.id));
+    });
+  });
+</script>
+</body>
+</html>
