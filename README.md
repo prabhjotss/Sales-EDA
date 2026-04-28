@@ -1,4 +1,4 @@
-<img width="1341" height="530" alt="image" src="https://github.com/user-attachments/assets/5f196ce0-2d58-4eaa-a811-cf20be3d15b1" />
+
 📊 Sales Analytics Dashboard (Flask + EDA)
 
 A complete end-to-end Data Analysis project built using Python, where raw sales data is transformed into meaningful business insights and visualized through an interactive Flask dashboard.
@@ -45,7 +45,7 @@ Product performance charts
 Designed for real-time business insights
 📸 Sample Output
 
-(Add screenshots of your dashboard here)
+<img width="1341" height="530" alt="image" src="https://github.com/user-attachments/assets/5f196ce0-2d58-4eaa-a811-cf20be3d15b1" />
 
 ⚙️ Installation & Setup
 # Clone the repository
@@ -61,8 +61,6 @@ pip install -r requirements.txt
 python app.py
 
 Open in browser:
-
-http://127.0.0.1:5000
 📈 Results
 Generated 8+ actionable insights
 Improved understanding of:
